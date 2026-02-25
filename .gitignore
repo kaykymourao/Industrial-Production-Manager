@@ -1,0 +1,18 @@
+# Node
+node_modules/
+dist/
+.vite/
+
+# Java / Gradle
+.gradle/
+build/
+out/
+
+# IntelliJ / VSCode
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
