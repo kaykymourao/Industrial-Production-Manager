@@ -1,190 +1,184 @@
-# 🏭 Industrial Production Manager (Industrial PM)
+Industrial Production Manager
 
-Aplicação Full Stack para gerenciamento de produção industrial, permitindo o controle de matérias-primas, cadastro de produtos e otimização automática do plano de produção com base no estoque disponível.
+Sistema Full-Stack para gerenciamento industrial de produtos, matérias-primas, estoque e simulação/aplicação de produção, desenvolvido com Spring Boot (Java) no backend e Vue 3 + Vite no frontend.
 
-O sistema calcula automaticamente qual a melhor combinação de produtos a serem fabricados para maximizar o valor total de venda, respeitando as restrições de estoque.
+📌 Sobre o Projeto
 
----
+O Industrial Production Manager é uma aplicação web que permite:
 
-# 🚀 Tecnologias Utilizadas
+Cadastro e gerenciamento de Produtos
 
-## 🔹 Back-end
-- Java 21
-- Spring Boot
-- Spring Web
-- Spring Data JPA
-- Spring Validation
-- H2 Database
-- Gradle
-- Swagger / OpenAPI
+Cadastro e controle de Matérias-primas
 
-## 🔹 Front-end
-- Vue 3
-- Vite
-- Axios
-- Vue Router
+Controle de estoque
 
----
+Geração de sugestão de produção baseada no estoque disponível
 
-# 🧠 Conceito do Sistema
+Aplicação da produção com baixa automática de estoque
 
-O sistema resolve o seguinte problema:
+Visualização de métricas no Dashboard
 
-> Dado um conjunto de matérias-primas disponíveis em estoque e produtos que utilizam essas matérias-primas em quantidades específicas, qual é o melhor plano de produção que gera o maior valor total possível?
+O sistema calcula automaticamente quantas unidades de cada produto podem ser produzidas com base na disponibilidade de matérias-primas e seus consumos por unidade.
 
-O algoritmo:
+🏗️ Arquitetura
 
-1. Ordena os produtos por maior preço.
-2. Calcula quantas unidades podem ser produzidas com o estoque atual.
-3. Consome virtualmente o estoque disponível.
-4. Gera:
-   - Itens produzidos
-   - Consumo por matéria-prima
-   - Snapshot de estoque (before/after)
-   - Valor total máximo possível
-
----
-
-# 📦 Funcionalidades
-
-## 📊 Dashboard
-- Total de produtos cadastrados
-- Total de matérias-primas
-- Soma total de estoque
-- Soma total do preço dos produtos
-- Valor máximo de produção sugerido
-
----
-
-## 🧱 Matérias-Primas
-- Criar
-- Editar
-- Listar com paginação
-- Buscar por código
-- Excluir
-- 🔒 Bloqueio de exclusão se estiver em uso (HTTP 409)
-
----
-
-## 🛠️ Produtos
-- Criar produto com composição de matérias-primas
-- Editar produto
-- Listar com paginação
-- Buscar por código
-- Excluir
-
----
-
-## 🏭 Produção
-
-### 🔍 Suggest
-Calcula o plano ideal de produção com base no estoque atual.
-
-### ✅ Apply
-Aplica o plano ao estoque, retornando:
-- Produtos produzidos
-- Consumo por matéria-prima
-- Snapshot do estoque
-- Valor total gerado
-
----
-
-# 🗂 Estrutura do Projeto
+Projeto dividido em duas camadas principais:
 
 Industrial-Production-Manager/
 │
-├── backend/ # Spring Boot API
+├── backend/              # Spring Boot (Java)
 │
 └── frontend/
-└── frontend-vue/ # Vue 3 + Vite
+    └── frontend-vue/     # Vue 3 + Vite
+Backend
 
----
+Java
 
-# ⚙️ Como Rodar Localmente
+Spring Boot
 
-## 🔹 Pré-requisitos
-- Java 21
-- Node.js (LTS recomendado)
-- NPM
+Spring Data JPA
 
----
+Hibernate
 
-# ▶️ Back-end
+Banco de dados relacional
 
-### 1️⃣ Acesse a pasta
-```bash
+Gradle
+
+Frontend
+
+Vue 3
+
+Vite
+
+Axios
+
+CSS moderno com layout responsivo
+
+🚀 Funcionalidades
+📊 Dashboard
+
+Total de produtos cadastrados
+
+Total de matérias-primas
+
+Soma total de estoque
+
+Soma total dos preços dos produtos
+
+Valor máximo possível de produção com base no estoque
+
+📦 Produtos
+
+Criar produto
+
+Editar produto
+
+Excluir produto
+
+Paginação
+
+Busca por código
+
+Associação de matérias-primas ao produto
+
+Definição de consumo por unidade produzida
+
+🏭 Matérias-primas
+
+Criar matéria-prima
+
+Editar matéria-prima
+
+Excluir matéria-prima (bloqueado se estiver em uso)
+
+Controle de estoque
+
+Paginação
+
+Busca por código
+
+⚙️ Produção
+Suggest
+
+Calcula automaticamente:
+
+Quantidade máxima possível de produção
+
+Valor total estimado
+
+Consumo necessário de cada matéria-prima
+
+Apply
+
+Aplica a produção
+
+Atualiza estoque
+
+Gera snapshot antes/depois do estoque
+
+Registra consumo
+
+🧮 Regra de Negócio da Produção
+
+Para cada produto:
+
+quantidade possível = menor valor entre:
+  (estoque da matéria-prima / consumo por unidade)
+
+Exemplo:
+
+Se um produto consome:
+
+2.5 KG de aço por unidade
+E o estoque disponível é:
+
+100 KG
+
+Produção máxima:
+
+100 / 2.5 = 40 unidades
+⚙️ Como Executar o Projeto
+🔹 1. Backend
+
+Entre na pasta:
+
 cd backend
 
+Execute:
 
----
-
-# ⚙️ Como Rodar Localmente
-
-## 🔹 Pré-requisitos
-- Java 21
-- Node.js (LTS recomendado)
-- NPM
-
----
-
-# ▶️ Back-end
-
-### 1️⃣ Acesse a pasta
-```bash
-cd backend
-
-### 2️⃣ Execute os testes
-./gradlew clean test
-
-### 3️⃣ Inicie o servidor
 ./gradlew bootRun
 
-# Servidor rodando em:
+O backend rodará em:
 
 http://localhost:8080
+🔹 2. Frontend
 
-# 📘 Swagger
+Entre na pasta:
 
-http://localhost:8080/swagger-ui/index.html
-
-# ▶️ Front-end
-
-### 1️⃣ Acesse a pasta
 cd frontend/frontend-vue
 
-### 2️⃣ Instale dependências
+Instale dependências:
+
 npm install
 
-### 3️⃣ Rode o projeto
+Execute:
+
 npm run dev
 
-# Frontend disponível em:
+O frontend rodará em:
 
 http://localhost:5173
+🔗 Comunicação Frontend ↔ Backend
 
-# 🔗 Comunicação Frontend ↔ Backend
+O frontend utiliza:
 
-# O Vite está configurado para usar proxy:
+baseURL: "/api"
 
-/api → http://localhost:8080
+Com proxy configurado no Vite para redirecionar chamadas para:
 
-# Exemplo:
-
-/api/products
-
-# 🧪 Endpoints Principais
-
-### Matérias-primas
-
-GET /raw-materials
-
-POST /raw-materials
-
-PUT /raw-materials/{id}
-
-DELETE /raw-materials/{id}
-
-### Produtos
+http://localhost:8080
+🧪 Principais Endpoints
+Produtos
 
 GET /products
 
@@ -194,71 +188,82 @@ PUT /products/{id}
 
 DELETE /products/{id}
 
-### Produção
+Matérias-primas
+
+GET /raw-materials
+
+POST /raw-materials
+
+PUT /raw-materials/{id}
+
+DELETE /raw-materials/{id}
+
+Produção
 
 POST /production/suggest
 
 POST /production/apply
 
-### Dashboard
+Dashboard
 
 GET /dashboard/summary
 
-# 🧮 Lógica do Algoritmo de Produção
+🎨 Interface
 
-Ordena produtos por maior valor.
+Layout moderno
 
-Calcula produção máxima possível para cada produto.
+Cards informativos
 
-Consome estoque virtualmente.
+Tabelas responsivas
 
-Gera plano final.
+Paginação dinâmica
 
-No Apply, persiste o novo estoque.
+Feedback visual de erro
 
-# Utiliza BigDecimal para evitar erros de precisão.
+Badges de status
 
-# 🛡️ Regras de Negócio Importantes
+Formatação monetária em pt-BR
 
-Não permite excluir matéria-prima que esteja vinculada a produto.
+🛡️ Regras Importantes
 
-Não permite código duplicado.
+Matéria-prima não pode ser excluída se estiver vinculada a produto.
 
-Não permite valores negativos.
+Estoque é atualizado apenas no apply.
 
-Produção nunca gera estoque negativo.
+suggest não altera dados.
 
-# 🧰 Possíveis Melhorias Futuras
+Sistema impede produção se estoque for insuficiente.
 
-Autenticação com JWT
+📈 Melhorias Futuras
 
-Persistência em banco externo (PostgreSQL)
+Autenticação (JWT)
 
-Deploy em cloud (Render / Railway)
+Controle de usuários
 
-Dashboard com gráficos
+Histórico de produção
 
-Histórico de produções aplicadas
+Gráficos no Dashboard
 
-Testes automatizados adicionais
+Logs de auditoria
 
-Dockerização
+Testes automatizados
 
-# 📌 Status do Projeto
+Deploy em nuvem
 
-✔ CRUD completo
-✔ Algoritmo de produção funcional
-✔ Integração front-end/back-end
-✔ Tratamento de erros
-✔ Paginação
-✔ Bloqueio 409
-✔ Swagger
-✔ Estrutura organizada
+🧑‍💻 Autor
 
-# 👨‍💻 Autor
+Desenvolvido por Kayky Mourão
 
-Desenvolvido como projeto Full Stack para demonstração de arquitetura, regras de negócio e integração entre camadas.
+Projeto criado para prática Full-Stack com foco em:
 
-# 📄 Licença
+Arquitetura organizada
 
-Projeto para fins educacionais e demonstração técnica.
+Separação de responsabilidades
+
+Lógica de negócio estruturada
+
+Integração Frontend + Backend
+
+📄 Licença
+
+Este projeto é de uso educacional e demonstrativo.
