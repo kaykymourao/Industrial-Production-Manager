@@ -1,9 +1,15 @@
 <template>
-  <div class="app">
-    <aside class="sidebar">
-      <h2>Industrial PM</h2>
-      <p class="sub">Industrial Production Manager</p>
-      <nav>
+  <div class="layout">
+    <aside class="sidebar card">
+      <div class="brand">
+        <div class="logo">🏭</div>
+        <div>
+          <div class="title">Industrial PM</div>
+          <div class="subtitle">Production Manager</div>
+        </div>
+      </div>
+
+      <nav class="menu">
         <RouterLink to="/">Dashboard</RouterLink>
         <RouterLink to="/products">Produtos</RouterLink>
         <RouterLink to="/raw-materials">Matérias-primas</RouterLink>
@@ -18,81 +24,84 @@
 </template>
 
 <style scoped>
-.app {
+.layout{
   display: grid;
-  grid-template-columns: 240px 1fr;
-  min-height: 100vh;
-  font-family: Arial, sans-serif;
-}
-
-.sidebar {
+  grid-template-columns: 280px 1fr;
+  gap: 16px;
   padding: 16px;
-  border-right: 1px solid #e6e6e6;
-  background: #fff;
+  min-height: 100vh;
+}
+
+.sidebar{
+  padding: 16px;
   position: sticky;
-  top: 0;
-  height: 100vh;
-}
-
-.sidebar h2 {
-  margin: 0 0 4px;
-  font-size: 18px;
-}
-
-.sidebar .sub {
-  margin: 0 0 14px;
-  font-size: 12px;
-  color: #666;
-}
-
-nav {
+  top: 16px;
+  height: calc(100vh - 32px);
   display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.brand{
+  display:flex;
+  gap: 12px;
+  align-items:center;
+  padding: 10px;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid var(--border);
+}
+
+.logo{
+  width: 44px;
+  height: 44px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius: 12px;
+  background: #eef2ff;
+  border: 1px solid #e0e7ff;
+  font-size: 20px;
+}
+
+.title{ font-weight: 800; font-size: 16px; }
+.subtitle{ font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+.menu{
+  display:flex;
   flex-direction: column;
   gap: 8px;
 }
 
-a {
+a{
   text-decoration: none;
-  padding: 10px 12px;
-  border-radius: 10px;
-  color: #111;
+  padding: 12px 12px;
+  border-radius: 12px;
+  color: var(--text);
   border: 1px solid transparent;
+  font-weight: 650;
 }
 
-a:hover {
-  border-color: #e6e6e6;
-  background: #fafafa;
+a:hover{
+  background: #f8fafc;
+  border-color: var(--border);
 }
 
-a.router-link-active {
-  background: #111;
-  color: #fff;
-  font-weight: 700;
+a.router-link-active{
+  background: #eef2ff;
+  border-color: #e0e7ff;
+  color: #1d4ed8;
 }
 
-.content {
+.content{
   padding: 18px;
-  background: #fafafa;
 }
 
-/* Mobile */
-@media (max-width: 820px) {
-  .app {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
-  }
-
-  .sidebar {
-    height: auto;
+@media (max-width: 900px){
+  .layout{ grid-template-columns: 1fr; }
+  .sidebar{
     position: static;
-    border-right: none;
-    border-bottom: 1px solid #e6e6e6;
-  }
-
-  nav {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 8px;
+    height: auto;
   }
 }
 </style>

@@ -51,12 +51,12 @@ public class ProductionPlanningEngine {
 
         // 🔥 NOVO CONSTRUTOR
         return new ProductionSuggestionResponse(
-                false,                // applied
-                totalUnits,           // totalUnits
-                total,                // totalValue
-                items,                // items
-                List.of(),            // consumptions (engine não aplica)
-                List.of()             // snapshot (engine não aplica)
+                false,
+                totalUnits,
+                total,
+                items,
+                List.of(),
+                List.of()
         );
     }
 

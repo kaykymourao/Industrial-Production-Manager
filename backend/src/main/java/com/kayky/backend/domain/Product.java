@@ -32,9 +32,7 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductMaterial> materials = new ArrayList<>();
 
-    protected Product() {
-        // JPA only
-    }
+    protected Product() {}
 
     public Product(String code, String name, BigDecimal price) {
         this.code = code;

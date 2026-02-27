@@ -66,7 +66,6 @@ public class RawMaterialService {
         return toResponse(rawMaterial);
     }
 
-    // 🔥 PAGINAÇÃO + FILTRO
     public Page<RawMaterialResponse> findAll(String code, Pageable pageable) {
 
         Page<RawMaterial> page;

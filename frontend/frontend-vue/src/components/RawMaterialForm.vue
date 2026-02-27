@@ -4,8 +4,8 @@ import { api } from "../services/api";
 
 const props = defineProps({
   open: { type: Boolean, default: false },
-  mode: { type: String, default: "create" }, // "create" | "edit"
-  initial: { type: Object, default: null }, // RawMaterialResponse
+  mode: { type: String, default: "create" },
+  initial: { type: Object, default: null },
 });
 
 const emit = defineEmits(["close", "saved"]);
@@ -75,7 +75,7 @@ async function submit() {
     const payload = {
       code: form.value.code.trim(),
       name: form.value.name.trim(),
-      stockQuantity: stockNorm, // BigDecimal-friendly
+      stockQuantity: stockNorm,
       unit: form.value.unit.trim(),
     };
 

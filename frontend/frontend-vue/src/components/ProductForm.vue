@@ -4,8 +4,8 @@ import { api } from "../services/api";
 
 const props = defineProps({
   open: { type: Boolean, default: false },
-  mode: { type: String, default: "create" }, // "create" | "edit"
-  initial: { type: Object, default: null }, // ProductResponse
+  mode: { type: String, default: "create" },
+  initial: { type: Object, default: null },
 });
 
 const emit = defineEmits(["close", "saved"]);
@@ -69,7 +69,6 @@ function parseBackendError(e) {
   const data = e?.response?.data;
   if (!data) return { msg: "Erro de rede ou servidor indisponível.", fields: {} };
 
-  // GlobalExceptionHandler pode retornar { error, status, timestamp } ou { fieldErrors: {...} }
   if (data.fieldErrors) {
     return { msg: data.error ?? "Validação falhou.", fields: data.fieldErrors };
   }
@@ -79,7 +78,6 @@ function parseBackendError(e) {
 async function loadRawMaterials() {
   rmLoading.value = true;
   try {
-    // tenta paginado (como você já tem no backend)
     const res = await api.get("/raw-materials", { params: { page: 0, size: 200 } });
     rawMaterials.value = res.data?.content ?? res.data ?? [];
   } catch {
@@ -97,7 +95,6 @@ async function submit() {
   fieldErrors.value = {};
 
   try {
-    // validações básicas no front
     if (!form.value.code?.trim()) throw { response: { data: { error: "Código é obrigatório." } } };
     if (!form.value.name?.trim()) throw { response: { data: { error: "Nome é obrigatório." } } };
 
@@ -128,7 +125,7 @@ async function submit() {
     const payload = {
       code: form.value.code.trim(),
       name: form.value.name.trim(),
-      price: priceNorm, // manda string com ponto (BigDecimal friendly)
+      price: priceNorm, 
       materials: materialsClean.map((m) => ({
         rawMaterialId: m.rawMaterialId,
         quantityPerUnit: m.quantityPerUnit,

@@ -24,9 +24,7 @@ public class ProductMaterial {
     @Column(name = "quantity_per_unit", nullable = false, precision = 19, scale = 4)
     private BigDecimal quantityPerUnit;
 
-    protected ProductMaterial() {
-        // JPA only
-    }
+    protected ProductMaterial() {}
 
     public ProductMaterial(Product product, RawMaterial rawMaterial, BigDecimal quantityPerUnit) {
         this.product = product;

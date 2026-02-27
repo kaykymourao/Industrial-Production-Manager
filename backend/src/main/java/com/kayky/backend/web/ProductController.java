@@ -36,7 +36,6 @@ public class ProductController {
         return productService.findById(id);
     }
 
-    // 🔥 PAGINAÇÃO + FILTRO
     @GetMapping
     public Page<ProductResponse> findAll(
             @RequestParam(required = false) String code,

@@ -6,13 +6,9 @@ import com.kayky.backend.domain.RawMaterial;
 import com.kayky.backend.dto.ProductionSuggestionResponse;
 import com.kayky.backend.repository.ProductRepository;
 import com.kayky.backend.repository.RawMaterialRepository;
-import com.kayky.backend.service.ProductionPlanningEngine;
 
 import com.kayky.backend.dto.ProductionMaterialConsumptionResponse;
 import com.kayky.backend.dto.ProductionStockSnapshotResponse;
-import com.kayky.backend.dto.ProductionMaterialConsumptionResponse;
-import com.kayky.backend.dto.ProductionStockSnapshotResponse;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -36,7 +36,6 @@ public class RawMaterialController {
         return rawMaterialService.findById(id);
     }
 
-    // 🔥 PAGINAÇÃO + FILTRO
     @GetMapping
     public Page<RawMaterialResponse> findAll(
             @RequestParam(required = false) String code,

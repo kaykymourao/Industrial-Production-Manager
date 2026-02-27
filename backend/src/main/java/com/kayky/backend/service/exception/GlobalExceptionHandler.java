@@ -1,8 +1,5 @@
-package com.kayky.backend.web;
+package com.kayky.backend.service.exception;
 
-import com.kayky.backend.service.exception.BadRequestException;
-import com.kayky.backend.service.exception.ConflictException;
-import com.kayky.backend.service.exception.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;

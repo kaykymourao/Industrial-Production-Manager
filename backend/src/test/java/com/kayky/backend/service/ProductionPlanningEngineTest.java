@@ -18,14 +18,11 @@ class ProductionPlanningEngineTest {
     void should_prioritize_higher_price_and_resolve_conflicts_by_consuming_stock() {
         RawMaterial rm = rawMaterialWithId(1L);
 
-        // Stock: 10 units of RM
         Map<Long, BigDecimal> stock = Map.of(1L, new BigDecimal("10"));
 
-        // Product A: price 100, consumes 6 per unit -> can produce 1
         Product a = productWithId(1L, "A", new BigDecimal("100"));
         a.replaceMaterials(List.of(new ProductMaterial(a, rm, new BigDecimal("6"))));
 
-        // Product B: price 80, consumes 5 per unit -> would be 2, but after A consumes, only 4 left -> 0
         Product b = productWithId(2L, "B", new BigDecimal("80"));
         b.replaceMaterials(List.of(new ProductMaterial(b, rm, new BigDecimal("5"))));
 
@@ -35,7 +32,6 @@ class ProductionPlanningEngineTest {
         assertEquals(1, result.getItems().size());
         assertEquals("A", result.getItems().get(0).getProductCode());
         assertEquals(1, result.getItems().get(0).getQuantityToProduce());
-        // assertEquals(new BigDecimal("100"), result.getTotalValue());
         assertEquals(0, result.getTotalValue().compareTo(new BigDecimal("100")));
     }
 
@@ -66,14 +62,11 @@ class ProductionPlanningEngineTest {
         ProductionSuggestionResponse result = engine.suggest(List.of(p), stock);
 
         assertEquals(1, result.getItems().size());
-        assertEquals(4, result.getItems().get(0).getQuantityToProduce()); // 10 / 2.5 = 4
-        //assertEquals(new BigDecimal("28"), result.getTotalValue()); // 4 * 7
+        assertEquals(4, result.getItems().get(0).getQuantityToProduce());
         assertEquals(0, result.getTotalValue().compareTo(new BigDecimal("28")));
     }
 
     private RawMaterial rawMaterialWithId(Long id) {
-        // We only need the id. Easiest way: create via reflection-free approach:
-        // If your RawMaterial constructor requires fields, use the real one and ignore other values.
         return new RawMaterial("RM", "Raw", BigDecimal.ZERO, "UNIT") {
             @Override public Long getId() { return id; }
         };

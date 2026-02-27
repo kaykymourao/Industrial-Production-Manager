@@ -18,6 +18,8 @@ const modalOpen = ref(false);
 const modalMode = ref("create");
 const editing = ref(null);
 
+const nf = new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 4 });
+
 function parseBackendError(e) {
   const data = e?.response?.data;
   if (!data) return "Erro de rede ou servidor indisponível.";
@@ -27,7 +29,6 @@ function parseBackendError(e) {
 async function load() {
   loading.value = true;
   error.value = "";
-
   try {
     const params = { page: page.value, size: size.value };
     if (searchCode.value?.trim()) params.code = searchCode.value.trim();
@@ -71,7 +72,6 @@ async function removeRaw(rm) {
     if (raws.value.length === 1 && page.value > 0) page.value -= 1;
     await load();
   } catch (e) {
-    // aqui pega 409 "in use" também
     error.value = parseBackendError(e);
   } finally {
     loading.value = false;
@@ -98,9 +98,12 @@ onMounted(load);
 </script>
 
 <template>
-  <div class="wrap">
-    <div class="top">
-      <h1>Matérias-primas</h1>
+  <div class="container">
+    <div class="header">
+      <div>
+        <h1>Matérias-primas</h1>
+        <p class="muted">Controle o estoque e evite excluir itens que estão vinculados a produtos.</p>
+      </div>
 
       <div class="actions">
         <input
@@ -108,56 +111,78 @@ onMounted(load);
           placeholder="Buscar por código (ex: RM-001)"
           @keyup.enter="applySearch"
         />
-        <button @click="applySearch" :disabled="loading">Buscar</button>
-        <button @click="load" :disabled="loading">Recarregar</button>
-        <button class="primary" @click="openCreate" :disabled="loading">+ Nova</button>
+        <button class="btn" @click="applySearch" :disabled="loading">Buscar</button>
+        <button class="btn" @click="load" :disabled="loading">Recarregar</button>
+        <button class="btn primary" @click="openCreate" :disabled="loading">+ Nova</button>
       </div>
     </div>
 
     <p v-if="error" class="error">{{ error }}</p>
-    <p v-if="loading">Carregando...</p>
 
-    <table v-else class="tbl">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Código</th>
-          <th>Nome</th>
-          <th>Estoque</th>
-          <th>Unidade</th>
-          <th style="width: 160px;">Ações</th>
-        </tr>
-      </thead>
+    <div class="card section">
+      <div class="sectionTitle">
+        <h2>Lista</h2>
+        <span class="muted">{{ totalElements }} item(ns)</span>
+      </div>
 
-      <tbody>
-        <tr v-for="r in raws" :key="r.id">
-          <td>{{ r.id }}</td>
-          <td>{{ r.code }}</td>
-          <td>{{ r.name }}</td>
-          <td>{{ r.stockQuantity }}</td>
-          <td>{{ r.unit }}</td>
-          <td class="btns">
-            <button @click="openEdit(r)" :disabled="loading">Editar</button>
-            <button class="danger" @click="removeRaw(r)" :disabled="loading">Excluir</button>
-          </td>
-        </tr>
+      <div v-if="loading" class="muted" style="padding: 12px;">Carregando...</div>
 
-        <tr v-if="raws.length === 0">
-          <td colspan="6" class="muted">Nenhuma matéria-prima encontrada.</td>
-        </tr>
-      </tbody>
-    </table>
+      <div v-else-if="raws.length === 0" class="empty">
+        <div class="emptyTitle">Nenhuma matéria-prima encontrada</div>
+        <div class="muted">Clique em <b>+ Nova</b> para cadastrar uma matéria-prima.</div>
+      </div>
 
-    <div class="pager" v-if="totalPages > 0">
-      <button @click="prevPage" :disabled="loading || page === 0">◀</button>
-      <span>Página {{ page + 1 }} de {{ totalPages }} ({{ totalElements }} itens)</span>
-      <button @click="nextPage" :disabled="loading || page + 1 >= totalPages">▶</button>
+      <table v-else class="table">
+        <thead>
+          <tr>
+            <th style="width: 90px;">ID</th>
+            <th style="width: 160px;">Código</th>
+            <th>Nome</th>
+            <th style="width: 180px;">Estoque</th>
+            <th style="width: 140px;">Unidade</th>
+            <th style="width: 190px;">Ações</th>
+          </tr>
+        </thead>
 
-      <select v-model.number="size" @change="applySearch" :disabled="loading">
-        <option :value="5">5</option>
-        <option :value="10">10</option>
-        <option :value="20">20</option>
-      </select>
+        <tbody>
+          <tr v-for="r in raws" :key="r.id">
+            <td class="strong">{{ r.id }}</td>
+            <td>
+              <span class="pill">{{ r.code }}</span>
+            </td>
+            <td>
+              <div class="strong">{{ r.name }}</div>
+            </td>
+            <td class="strong">
+              {{ nf.format(Number(r.stockQuantity || 0)) }}
+            </td>
+            <td>
+              <span class="unit">{{ r.unit }}</span>
+            </td>
+            <td class="btns">
+              <button class="btn" @click="openEdit(r)" :disabled="loading">Editar</button>
+              <button class="btn danger" @click="removeRaw(r)" :disabled="loading">Excluir</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pager" v-if="totalPages > 0">
+        <button class="btn" @click="prevPage" :disabled="loading || page === 0">◀</button>
+
+        <span class="muted">
+          Página <b>{{ page + 1 }}</b> de <b>{{ totalPages }}</b>
+          <span v-if="totalElements"> — {{ totalElements }} itens</span>
+        </span>
+
+        <button class="btn" @click="nextPage" :disabled="loading || page + 1 >= totalPages">▶</button>
+
+        <select class="select" v-model.number="size" @change="applySearch" :disabled="loading">
+          <option :value="5">5</option>
+          <option :value="10">10</option>
+          <option :value="20">20</option>
+        </select>
+      </div>
     </div>
 
     <RawMaterialForm
@@ -171,25 +196,84 @@ onMounted(load);
 </template>
 
 <style scoped>
-.wrap { max-width: 980px; }
-.top { display:flex; align-items:flex-end; justify-content:space-between; gap: 12px; flex-wrap: wrap; }
-.actions { display:flex; gap: 8px; align-items:center; flex-wrap: wrap; }
+.header{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.actions{
+  display:flex;
+  gap: 10px;
+  align-items:center;
+  flex-wrap: wrap;
+}
 .actions input{
-  padding: 8px; border: 1px solid #ddd; border-radius: 8px; min-width: 220px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  min-width: 280px;
+  background: #fff;
 }
-button{
-  padding: 8px 10px; border: 1px solid #ddd; border-radius: 8px; cursor:pointer;
-  background:#f7f7f7;
+
+.section{ padding: 14px; }
+.sectionTitle{
+  display:flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
 }
-button.primary{ background:#111; color:#fff; border-color:#111; }
-button.danger{ background:#fff0f0; border-color:#ffd0d0; }
-.tbl { width: 100%; border-collapse: collapse; margin-top: 12px; }
-th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-.btns { display:flex; gap: 6px; }
+
+.btns{ display:flex; gap: 8px; }
+
 .pager{
-  display:flex; align-items:center; gap: 10px; margin-top: 12px;
+  display:flex;
+  align-items:center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 14px;
+  flex-wrap: wrap;
 }
-.pager select{ padding: 7px; border: 1px solid #ddd; border-radius: 8px; }
-.error{ color:#c00; margin: 8px 0; }
-.muted{ color:#666; text-align:center; padding: 16px; }
+
+.select{
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.pill{
+  display:inline-flex;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: #fff;
+  font-weight: 800;
+  font-size: 12px;
+}
+
+.unit{
+  display:inline-flex;
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #fff;
+  font-weight: 800;
+  font-size: 12px;
+}
+
+.strong{ font-weight: 800; }
+.muted{ color: var(--muted); }
+.error{ color:#b91c1c; font-weight: 800; margin: 8px 0 12px; }
+
+.empty{
+  padding: 16px;
+  border: 1px dashed var(--border);
+  border-radius: 14px;
+  background: #fff;
+}
+.emptyTitle{ font-weight: 900; margin-bottom: 6px; }
 </style>
